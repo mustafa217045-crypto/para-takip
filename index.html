@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Para Takip">
+<title>Para Takip</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f766e'/%3E%3Ctext x='50' y='70' font-size='58' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3E₺%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f4f6f8;--card:#ffffff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;
+  --brand:#0f766e;--brand-soft:#ccfbf1;--red:#dc2626;--red-soft:#fee2e2;--amber:#b45309;--amber-soft:#fef3c7;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0b1215;--card:#151e22;--text:#e5e7eb;--muted:#9ca3af;--line:#26323a;
+    --brand:#2dd4bf;--brand-soft:#123a36;--red:#f87171;--red-soft:#3b1a1a;--amber:#fbbf24;--amber-soft:#3a2d10;--shadow:none}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px}
+body{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;padding:14px 16px calc(14px);padding-top:calc(14px + env(safe-area-inset-top))}
+@media (prefers-color-scheme: dark){header{background:#0f3d38}}
+header h1{margin:0;font-size:20px}
+main{padding:12px 16px;max-width:640px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.big{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.muted{color:var(--muted);font-size:13px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid2 .card{margin-bottom:0}
+.money{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.pos{color:var(--brand)} .neg{color:var(--red)}
+h2{font-size:15px;margin:18px 0 8px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.list .item{padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.list .item:last-child{border-bottom:0}
+.item .t{font-weight:600}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;background:var(--brand);border-radius:6px}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:20px;background:var(--brand-soft);color:var(--brand);margin-left:6px;vertical-align:middle}
+.tag.amber{background:var(--amber-soft);color:var(--amber)}
+.tag.gray{background:var(--line);color:var(--muted)}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;background:none;color:var(--muted);padding:10px 0 12px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button svg{width:24px;height:24px}
+nav button.on{color:var(--brand);font-weight:600}
+.fab{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:7;background:var(--brand);color:#fff;border:0;border-radius:30px;padding:15px 20px;font-size:16px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;align-items:center;gap:6px}
+@media (prefers-color-scheme: dark){.fab{color:#042f2e}}
+.btn{border:0;border-radius:10px;padding:12px 16px;font-size:16px;font-weight:600;background:var(--brand);color:#fff;cursor:pointer}
+@media (prefers-color-scheme: dark){.btn{color:#042f2e}}
+.btn.ghost{background:var(--line);color:var(--text)}
+.btn.danger{background:var(--red-soft);color:var(--red)}
+.btn.block{width:100%}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btns .btn{flex:1}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 0 4px}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font-size:16px;font-family:inherit}
+input.amount{font-size:26px;font-weight:700;text-align:right}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:20px;padding:8px 14px;font-size:14px}
+.chips button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+@media (prefers-color-scheme: dark){.chips button.on{color:#042f2e}}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center}
+.modal.open{display:flex}
+.sheet{background:var(--card);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom))}
+.sheet h3{margin:0 0 4px;font-size:18px}
+.empty{text-align:center;color:var(--muted);padding:26px 10px}
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#111827;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.monthnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.monthnav button{border:0;background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:10px;width:42px;height:38px;font-size:18px}
+.monthnav b{font-size:17px}
+.warn{background:var(--amber-soft);color:var(--amber);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:12px}
+.seg{display:flex;background:var(--line);border-radius:10px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;padding:8px;border-radius:8px;color:var(--muted);font-size:14px}
+.seg button.on{background:var(--card);color:var(--text);font-weight:600}
+</style>
+</head>
+<body>
+<header><h1 id="baslik">Para Takip</h1></header>
+<main id="app"></main>
+
+<button class="fab" id="fab" onclick="odemeFormu()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>Para Aldım
+</button>
+
+<nav>
+  <button data-s="ozet" class="on" onclick="git('ozet')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg>Özet</button>
+  <button data-s="isler" onclick="git('isler')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>İşler</button>
+  <button data-s="gecmis" onclick="git('gecmis')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Aldıklarım</button>
+  <button data-s="ayar" onclick="git('ayar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Yedek</button>
+</nav>
+
+<div class="modal" id="modal" onclick="if(event.target===this)kapat()"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="dosya" accept=".json,application/json" style="display:none" onchange="yedekYukle(this)">
+
+<script>
+/* ---------- Veri ---------- */
+const ANAHTAR='paraTakip_v1';
+let V={isler:[],odemeler:[],sonYedek:null};
+let depoCalisiyor=true;
+try{const s=localStorage.getItem(ANAHTAR);if(s)V=Object.assign(V,JSON.parse(s));localStorage.setItem('__t','1');localStorage.removeItem('__t')}catch(e){depoCalisiyor=false}
+function kaydet(){try{localStorage.setItem(ANAHTAR,JSON.stringify(V))}catch(e){depoCalisiyor=false;toast('Kaydedilemedi! Yedek alın.')}}
+const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+
+/* ---------- Yardımcılar ---------- */
+const TL=n=>new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:2}).format(n||0);
+const bugun=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
+const tarihYaz=s=>{if(!s)return'';const[y,m,g]=s.split('-');return `${g}.${m}.${y}`};
+const AYLAR=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function sayiOku(s){s=String(s||'').trim().replace(/\s|₺|TL/gi,'');if(!s)return 0;
+  if(s.includes(',')){s=s.replace(/\./g,'').replace(',','.')}else if(/^\d{1,3}(\.\d{3})+$/.test(s)){s=s.replace(/\./g,'')}
+  const n=parseFloat(s);return isNaN(n)?0:Math.round(n*100)/100}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.z);toast.z=setTimeout(()=>t.classList.remove('show'),2200)}
+const isBul=i=>V.isler.find(x=>x.id===i);
+const isAlinan=i=>V.odemeler.filter(o=>o.isId===i).reduce((a,o)=>a+o.tutar,0);
+const isKalan=is=>is.tutar?Math.max(0,is.tutar-isAlinan(is.id)):0;
+
+/* ---------- Ekranlar ---------- */
+let ekran='ozet',ay=new Date().getMonth(),yil=new Date().getFullYear(),isFiltre='acik';
+function git(s){ekran=s;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===s));ciz();window.scrollTo(0,0)}
+function ciz(){({ozet:ozetCiz,isler:islerCiz,gecmis:gecmisCiz,ayar:ayarCiz})[ekran]()}
+const app=()=>document.getElementById('app');
+
+function uyarilar(){let h='';
+  if(!depoCalisiyor)h+=`<div class="warn">⚠ Bu tarayıcı veriyi kalıcı saklayamıyor. Uygulamayı "Ana ekrana ekle" ile açın ve düzenli yedek alın.</div>`;
+  else if(V.odemeler.length>=5){const g=V.sonYedek?Math.floor((Date.now()-V.sonYedek)/864e5):999;
+    if(g>=14)h+=`<div class="warn" onclick="git('ayar')">💾 ${V.sonYedek?g+' gündür':'Hiç'} yedek almadınız. Telefon değişir/silinirse kayıtlar gider. <u>Yedek al</u></div>`}
+  return h}
+
+function odemeSatir(o,isGoster=true){const is=isBul(o.isId);
+  return `<div class="item" onclick="odemeFormu('${o.id}')"><div class="row"><div><div class="t">${isGoster?(is?esc(is.ad):'<span class="muted">İşe bağlı değil</span>'):tarihYaz(o.tarih)}</div>
+  <div class="muted">${isGoster?tarihYaz(o.tarih)+' · ':''}${esc(o.yontem||'')}${o.not?' · '+esc(o.not):''}</div></div>
+  <div class="money pos">+${TL(o.tutar)}</div></div></div>`}
+
+function ozetCiz(){
+  const simdi=new Date(),a=simdi.getMonth(),y=simdi.getFullYear();
+  const buAy=V.odemeler.filter(o=>{const d=new Date(o.tarih);return d.getMonth()===a&&d.getFullYear()===y}).reduce((s,o)=>s+o.tutar,0);
+  const gecenD=new Date(y,a-1,1);
+  const gecenAy=V.odemeler.filter(o=>{const d=new Date(o.tarih);return d.getMonth()===gecenD.getMonth()&&d.getFullYear()===gecenD.getFullYear()}).reduce((s,o)=>s+o.tutar,0);
+  const acik=V.isler.filter(i=>!i.kapali&&i.tutar>0);
+  const alacak=acik.reduce((s,i)=>s+isKalan(i),0);
+  const buYil=V.odemeler.filter(o=>new Date(o.tarih).getFullYear()===y).reduce((s,o)=>s+o.tutar,0);
+  const son=[...V.odemeler].sort((p,q)=>q.tarih.localeCompare(p.tarih)||q.olusturma-p.olusturma).slice(0,6);
+  const alacakli=acik.filter(i=>isKalan(i)>0).sort((p,q)=>isKalan(q)-isKalan(p)).slice(0,5);
+  app().innerHTML=uyarilar()+`
+  <div class="card"><div class="muted">${AYLAR[a]} ayında aldığım</div><div class="big pos">${TL(buAy)}</div>
+    <div class="muted">Geçen ay: ${TL(gecenAy)} · ${y} toplamı: ${TL(buYil)}</div></div>
+  <div class="card" onclick="git('isler')"><div class="muted">Daha alacağım (açık işlerden)</div><div class="big ${alacak>0?'neg':''}">${TL(alacak)}</div>
+    <div class="muted">${acik.length} açık iş</div></div>
+  ${alacakli.length?`<h2>En çok alacağım işler</h2><div class="card list">${alacakli.map(isSatir).join('')}</div>`:''}
+  <h2>Son aldıklarım</h2>
+  <div class="card list">${son.length?son.map(o=>odemeSatir(o)).join(''):`<div class="empty">Henüz kayıt yok.<br>Para aldığında aşağıdaki <b>“Para Aldım”</b> butonuna bas.</div>`}</div>`}
+
+function isSatir(i){const al=isAlinan(i.id),kal=isKalan(i),yuzde=i.tutar?Math.min(100,al/i.tutar*100):0;
+  const durum=i.kapali?'<span class="tag gray">Kapandı</span>':(i.tutar&&kal<=0?'<span class="tag">Tamamı alındı</span>':(i.tutar?'':'<span class="tag amber">Tutar yok</span>'));
+  return `<div class="item" onclick="isDetay('${i.id}')"><div class="row"><div class="t">${esc(i.ad)}${durum}</div>
+   <div class="money ${kal>0?'neg':'pos'}">${i.tutar?(kal>0?TL(kal)+' kaldı':''):''}</div></div>
+   <div class="muted">${i.musteri?esc(i.musteri)+' · ':''}Alınan ${TL(al)}${i.tutar?' / '+TL(i.tutar):''}</div>
+   ${i.tutar?`<div class="bar"><i style="width:${yuzde}%"></i></div>`:''}</div>`}
+
+function islerCiz(){
+  let l=V.isler.filter(i=>isFiltre==='hepsi'||(isFiltre==='acik'?!i.kapali:i.kapali));
+  l.sort((p,q)=>(q.tarih||'').localeCompare(p.tarih||''));
+  app().innerHTML=uyarilar()+`
+  <div class="seg">${[['acik','Açık'],['kapali','Kapanan'],['hepsi','Hepsi']].map(([k,t])=>`<button class="${isFiltre===k?'on':''}" onclick="isFiltre='${k}';islerCiz()">${t}</button>`).join('')}</div>
+  <button class="btn block ghost" onclick="isFormu()">+ Yeni iş ekle</button>
+  <div class="card list" style="margin-top:12px">${l.length?l.map(isSatir).join(''):'<div class="empty">Bu listede iş yok.</div>'}</div>`}
+
+function gecmisCiz(){
+  const l=V.odemeler.filter(o=>{const d=new Date(o.tarih);return d.getMonth()===ay&&d.getFullYear()===yil}).sort((p,q)=>q.tarih.localeCompare(p.tarih)||q.olusturma-p.olusturma);
+  const top=l.reduce((s,o)=>s+o.tutar,0);
+  const yontemler={};l.forEach(o=>{const k=o.yontem||'Diğer';yontemler[k]=(yontemler[k]||0)+o.tutar});
+  app().innerHTML=`
+  <div class="monthnav"><button onclick="ayKaydir(-1)">‹</button><b>${AYLAR[ay]} ${yil}</b><button onclick="ayKaydir(1)">›</button></div>
+  <div class="card"><div class="muted">Bu ay toplam (${l.length} kayıt)</div><div class="big pos">${TL(top)}</div>
+   <div class="muted">${Object.entries(yontemler).map(([k,v])=>esc(k)+': '+TL(v)).join(' · ')}</div></div>
+  <div class="card list">${l.length?l.map(o=>odemeSatir(o)).join(''):'<div class="empty">Bu ay kayıt yok.</div>'}</div>`}
+function ayKaydir(n){ay+=n;if(ay<0){ay=11;yil--}if(ay>11){ay=0;yil++}gecmisCiz()}
+
+function ayarCiz(){
+  app().innerHTML=`
+  <div class="card"><b>Yedek al</b><p class="muted">Kayıtlar sadece bu telefonda durur, internete gitmez. Telefon değişirse ya da uygulama verisi silinirse kaybolmasın diye ara ara yedek alıp dosyayı WhatsApp'ta kendinize veya Drive'a atın.</p>
+   <div class="muted">Son yedek: ${V.sonYedek?new Date(V.sonYedek).toLocaleString('tr-TR'):'hiç alınmadı'}</div>
+   <div class="btns"><button class="btn" onclick="yedekAl()">Yedek dosyası indir</button></div>
+   <div class="btns"><button class="btn ghost" onclick="yazili()">Yazı olarak paylaş / kopyala</button></div></div>
+  <div class="card"><b>Yedekten geri yükle</b><p class="muted">Daha önce aldığınız yedek dosyasını seçin. Mevcut kayıtların yerine geçer.</p>
+   <div class="btns"><button class="btn ghost" onclick="document.getElementById('dosya').click()">Yedek dosyası seç</button></div></div>
+  <div class="card"><b>Excel için dışa aktar</b><p class="muted">Tüm aldıklarınızı tablo (CSV) olarak indirir.</p>
+   <div class="btns"><button class="btn ghost" onclick="csvAl()">CSV indir</button></div></div>
+  <div class="card"><div class="muted">${V.isler.length} iş · ${V.odemeler.length} tahsilat kayıtlı. Toplam alınan: ${TL(V.odemeler.reduce((s,o)=>s+o.tutar,0))}</div>
+   <div class="btns"><button class="btn danger" onclick="hepsiniSil()">Tüm verileri sil</button></div></div>`}
+
+/* ---------- Formlar ---------- */
+function ac(h){document.getElementById('sheet').innerHTML=h;document.getElementById('modal').classList.add('open')}
+function kapat(){document.getElementById('modal').classList.remove('open')}
+let secYontem='Nakit';
+function yontemChips(sec){secYontem=sec;return `<div class="chips" id="ych">${['Nakit','Havale/EFT','Kart','Diğer'].map(y=>`<button type="button" class="${y===sec?'on':''}" onclick="secYontem='${y}';document.querySelectorAll('#ych button').forEach(b=>b.classList.toggle('on',b.textContent===secYontem))">${y}</button>`).join('')}</div>`}
+
+function odemeFormu(oid,varsayilanIs){
+  const o=oid?V.odemeler.find(x=>x.id===oid):null;
+  const secili=o?o.isId:(varsayilanIs||'');
+  const acikIsler=V.isler.filter(i=>!i.kapali||i.id===secili).sort((p,q)=>(q.tarih||'').localeCompare(p.tarih||''));
+  ac(`<h3>${o?'Kaydı düzenle':'Para aldım'}</h3>
+  <label>Tutar (₺)</label><input id="f_tutar" class="amount" inputmode="decimal" placeholder="0" value="${o?String(o.tutar).replace('.',','):''}">
+  <label>Hangi iş için?</label>
+  <select id="f_is" onchange="if(this.value==='__yeni'){document.getElementById('yeniIs').style.display='block';document.getElementById('f_yeniAd').focus()}else document.getElementById('yeniIs').style.display='none'">
+    <option value="">— İşe bağlı değil —</option>
+    ${acikIsler.map(i=>`<option value="${i.id}" ${i.id===secili?'selected':''}>${esc(i.ad)}${i.tutar?' ('+TL(isKalan(i))+' kaldı)':''}</option>`).join('')}
+    <option value="__yeni">+ Yeni iş oluştur…</option>
+  </select>
+  <div id="yeniIs" style="display:none"><label>Yeni iş adı</label><input id="f_yeniAd" placeholder="örn. Ahmet Bey mutfak tadilatı">
+    <label>Anlaşılan toplam tutar (bilmiyorsan boş bırak)</label><input id="f_yeniTop" inputmode="decimal" placeholder="0"></div>
+  <label>Tarih</label><input id="f_tarih" type="date" value="${o?o.tarih:bugun()}">
+  <label>Nasıl aldın?</label>${yontemChips(o?.yontem||'Nakit')}
+  <label>Not (isteğe bağlı)</label><input id="f_not" placeholder="örn. avans, ihtiyaçtan istedim" value="${esc(o?.not||'')}">
+  <div class="btns">${o?`<button class="btn danger" onclick="odemeSil('${o.id}')">Sil</button>`:''}<button class="btn ghost" onclick="kapat()">Vazgeç</button><button class="btn" onclick="odemeKaydet('${o?o.id:''}')">Kaydet</button></div>`);
+  if(!o)setTimeout(()=>document.getElementById('f_tutar').focus(),150);
+}
+function odemeKaydet(oid){
+  const tutar=sayiOku(document.getElementById('f_tutar').value);
+  if(tutar<=0){toast('Tutar girin');return}
+  let isId=document.getElementById('f_is').value;
+  if(isId==='__yeni'){const ad=document.getElementById('f_yeniAd').value.trim();if(!ad){toast('Yeni işin adını yazın');return}
+    const yeni={id:id(),ad,musteri:'',tutar:sayiOku(document.getElementById('f_yeniTop').value),tarih:document.getElementById('f_tarih').value||bugun(),not:'',kapali:false};
+    V.isler.push(yeni);isId=yeni.id}
+  const kayit={tutar,isId:isId||null,tarih:document.getElementById('f_tarih').value||bugun(),yontem:secYontem,not:document.getElementById('f_not').value.trim()};
+  if(oid){Object.assign(V.odemeler.find(x=>x.id===oid),kayit)}else V.odemeler.push({id:id(),olusturma:Date.now(),...kayit});
+  kaydet();kapat();
+  const is=isBul(kayit.isId);
+  toast(oid?'Güncellendi':(is&&is.tutar?`Kaydedildi · ${TL(isKalan(is))} kaldı`:'Kaydedildi ✓'));
+  ciz();if(acikDetay)isDetay(acikDetay);
+}
+function odemeSil(oid){if(!confirm('Bu kayıt silinsin mi?'))return;V.odemeler=V.odemeler.filter(x=>x.id!==oid);kaydet();kapat();toast('Silindi');ciz();if(acikDetay)isDetay(acikDetay)}
+
+function isFormu(iid){const i=iid?isBul(iid):null;
+  ac(`<h3>${i?'İşi düzenle':'Yeni iş'}</h3>
+  <label>İş adı</label><input id="i_ad" value="${esc(i?.ad||'')}" placeholder="örn. Ahmet Bey mutfak tadilatı">
+  <label>Kimden alacağım? (isteğe bağlı)</label><input id="i_mus" value="${esc(i?.musteri||'')}" placeholder="İsim / firma">
+  <label>Anlaşılan toplam tutar (₺) — bilmiyorsan boş bırak</label><input id="i_top" inputmode="decimal" value="${i?.tutar?String(i.tutar).replace('.',','):''}" placeholder="0">
+  <label>Başlangıç tarihi</label><input id="i_tar" type="date" value="${i?.tarih||bugun()}">
+  <label>Not</label><textarea id="i_not" rows="2">${esc(i?.not||'')}</textarea>
+  <div class="btns">${i?`<button class="btn danger" onclick="isSil('${i.id}')">Sil</button>`:''}<button class="btn ghost" onclick="${i?`isDetay('${i.id}')`:'kapat()'}">Vazgeç</button><button class="btn" onclick="isKaydet('${i?i.id:''}')">Kaydet</button></div>`);
+  if(!i)setTimeout(()=>document.getElementById('i_ad').focus(),150)}
+function isKaydet(iid){const ad=document.getElementById('i_ad').value.trim();if(!ad){toast('İş adı yazın');return}
+  const k={ad,musteri:document.getElementById('i_mus').value.trim(),tutar:sayiOku(document.getElementById('i_top').value),tarih:document.getElementById('i_tar').value||bugun(),not:document.getElementById('i_not').value.trim()};
+  if(iid){Object.assign(isBul(iid),k);kaydet();isDetay(iid)}else{const y={id:id(),kapali:false,...k};V.isler.push(y);kaydet();isDetay(y.id)}
+  ciz();toast('Kaydedildi ✓')}
+function isSil(iid){const n=V.odemeler.filter(o=>o.isId===iid).length;
+  if(!confirm(n?`Bu işe bağlı ${n} tahsilat var. İş silinirse bu tahsilatlar "işe bağlı değil" olarak kalır. Silinsin mi?`:'Bu iş silinsin mi?'))return;
+  V.isler=V.isler.filter(x=>x.id!==iid);V.odemeler.forEach(o=>{if(o.isId===iid)o.isId=null});kaydet();acikDetay=null;kapat();ciz();toast('İş silindi')}
+
+let acikDetay=null;
+function isDetay(iid){const i=isBul(iid);if(!i)return;acikDetay=iid;
+  const ods=V.odemeler.filter(o=>o.isId===iid).sort((p,q)=>q.tarih.localeCompare(p.tarih));
+  const al=isAlinan(iid),kal=isKalan(i);
+  ac(`<div class="row"><h3>${esc(i.ad)}</h3><button class="btn ghost" style="padding:8px 12px" onclick="isFormu('${i.id}')">Düzenle</button></div>
+  <div class="muted">${i.musteri?esc(i.musteri)+' · ':''}${tarihYaz(i.tarih)}${i.kapali?' · <b>Kapandı</b>':''}</div>
+  ${i.not?`<p class="muted">${esc(i.not)}</p>`:''}
+  <div class="grid2" style="margin-top:12px">
+   <div class="card"><div class="muted">Alınan</div><div class="money pos" style="font-size:20px">${TL(al)}</div></div>
+   <div class="card"><div class="muted">${i.tutar?'Kalan':'Anlaşılan'}</div><div class="money ${kal>0?'neg':''}" style="font-size:20px">${i.tutar?TL(kal):'—'}</div></div></div>
+  ${i.tutar?`<div class="muted" style="margin-top:8px">Anlaşılan: ${TL(i.tutar)}${al>i.tutar?' · <b>'+TL(al-i.tutar)+' fazla alındı</b>':''}</div><div class="bar"><i style="width:${Math.min(100,al/i.tutar*100)}%"></i></div>`:''}
+  <div class="btns"><button class="btn" onclick="odemeFormu(null,'${i.id}')">+ Bu işten para aldım</button></div>
+  <h2>${ods.length} parça ödeme</h2>
+  <div class="list">${ods.length?ods.map(o=>odemeSatir(o,false)).join(''):'<div class="empty">Bu işten henüz para alınmadı.</div>'}</div>
+  <div class="btns"><button class="btn ghost" onclick="isKapat('${i.id}')">${i.kapali?'İşi tekrar aç':'İşi kapat (bitti)'}</button><button class="btn ghost" onclick="acikDetay=null;kapat()">Kapat</button></div>`)}
+function isKapat(iid){const i=isBul(iid);i.kapali=!i.kapali;kaydet();isDetay(iid);ciz();toast(i.kapali?'İş kapatıldı':'İş açıldı')}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')acikDetay=null});
+
+/* ---------- Yedek ---------- */
+function indir(ad,icerik,tip){const b=new Blob([icerik],{type:tip});
+  const f=new File([b],ad,{type:tip});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:ad}).catch(()=>{});return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=ad;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+function yedekAl(){V.sonYedek=Date.now();kaydet();indir(`para-takip-yedek-${bugun()}.json`,JSON.stringify({uygulama:'ParaTakip',surum:1,...V},null,1),'application/json');ayarCiz()}
+function yazili(){
+  const satir=[...V.odemeler].sort((p,q)=>q.tarih.localeCompare(p.tarih)).map(o=>`${tarihYaz(o.tarih)}  ${TL(o.tutar)}  ${isBul(o.isId)?.ad||'-'}${o.not?' ('+o.not+')':''}`);
+  const metin=`PARA TAKİP (${tarihYaz(bugun())})\nToplam alınan: ${TL(V.odemeler.reduce((s,o)=>s+o.tutar,0))}\n\n`+
+   V.isler.filter(i=>!i.kapali&&i.tutar).map(i=>`${i.ad}: ${TL(isAlinan(i.id))} / ${TL(i.tutar)} — ${TL(isKalan(i))} kaldı`).join('\n')+'\n\n'+satir.join('\n');
+  if(navigator.share)navigator.share({text:metin}).catch(()=>{});
+  else navigator.clipboard?.writeText(metin).then(()=>toast('Panoya kopyalandı'),()=>toast('Kopyalanamadı'))}
+function csvAl(){const s=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const r=[['Tarih','Tutar','İş','Müşteri','Yöntem','Not'].map(s).join(';')].concat([...V.odemeler].sort((p,q)=>p.tarih.localeCompare(q.tarih)).map(o=>{const i=isBul(o.isId);return [tarihYaz(o.tarih),String(o.tutar).replace('.',','),i?.ad||'',i?.musteri||'',o.yontem||'',o.not||''].map(s).join(';')}));
+  indir(`para-takip-${bugun()}.csv`,'﻿'+r.join('\r\n'),'text/csv')}
+function yedekYukle(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.isler)||!Array.isArray(d.odemeler))throw 0;
+    if(!confirm(`Yedekte ${d.isler.length} iş, ${d.odemeler.length} tahsilat var. Şu anki kayıtların yerine geçsin mi?`))return;
+    V={isler:d.isler,odemeler:d.odemeler,sonYedek:d.sonYedek||Date.now()};kaydet();ciz();toast('Yedek yüklendi ✓')}catch(e){toast('Bu dosya geçerli bir yedek değil')}
+    inp.value=''};r.readAsText(f)}
+function hepsiniSil(){if(!confirm('TÜM işler ve tahsilatlar silinecek. Emin misiniz?'))return;if(prompt('Onay için SİL yazın')?.trim().toLocaleUpperCase('tr-TR')!=='SİL')return;
+  V={isler:[],odemeler:[],sonYedek:null};kaydet();ciz();toast('Hepsi silindi')}
+
+/* ---------- Başlat ---------- */
+ciz();
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+</script>
+</body>
+</html>
